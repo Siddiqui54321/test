@@ -1,0 +1,99 @@
+Select t.region, t.zone,
+
+       Sum(Decode(nvl(ri_cash_amount_day,0), 0, nvl(rc_cash_amount_day,0), nvl(ri_cash_amount_day,0))) cash_amount_day,
+
+       Sum(Decode(nvl(ri_cheq_amount_day,0), 0, nvl(rc_cheq_amount_day,0), nvl(ri_cheq_amount_day,0))) cheq_amount_day,
+
+       Sum(Decode(nvl(ri_instramount_day,0), 0, nvl(rc_rectamnt_day,0),    nvl(ri_instramount_day,0))) tot_amount_day,
+
+       ---
+
+       Sum(Decode(nvl(ri_cash_amount_mon,0), 0, nvl(rc_cash_amount_mon,0), nvl(ri_cash_amount_mon,0))) cash_amount_mon,
+
+       Sum(Decode(nvl(ri_cheq_amount_mon,0), 0, nvl(rc_cheq_amount_mon,0), nvl(ri_cheq_amount_mon,0))) cheq_amount_mon,
+
+       Sum(Decode(nvl(ri_instramount_mon,0), 0, nvl(rc_rectamnt_mon,0),    nvl(ri_instramount_mon,0))) tot_amount_mon,
+
+       ---
+
+       Sum(Decode(nvl(ri_cash_amount_base,0), 0, nvl(rc_cash_amount_base,0), nvl(ri_cash_amount_base,0))) cash_amount_base,
+
+       Sum(Decode(nvl(ri_cheq_amount_base,0), 0, nvl(rc_cheq_amount_base,0), nvl(ri_cheq_amount_base,0))) cheq_amount_base,
+
+       Sum(Decode(nvl(ri_instramount_base,0), 0, nvl(rc_rectamnt_base,0),    nvl(ri_instramount_base,0))) tot_amount_base
+
+From (
+
+select rg.prg_regncode||'-'||rg.prg_regndesc region, rc.pcl_locatcode||'-'||zn.pcl_locatdesc zone,
+
+       rc.rrc_receiptno, rc.rrc_recttype, rc.rrc_rectdate, /*rc.rrc_chequeno,*/
+
+       max(decode(to_char(rc.rrc_rectdate,'MM'),to_char(to_date('30/12/2024','dd/mm/yyyy'),'MM'),rc.rrc_rectamnt,null)) rc_rectamnt_mon,
+
+       max(decode(to_char(rc.rrc_rectdate,'MM'),to_char(to_date('30/12/2024','dd/mm/yyyy'),'MM'),decode(rc.rrc_recttype,'Q',rc.rrc_rectamnt,null),null)) rc_cheq_amount_mon,
+
+       max(decode(to_char(rc.rrc_rectdate,'MM'),to_char(to_date('30/12/2024','dd/mm/yyyy'),'MM'),decode(rc.rrc_recttype,'Q',null,rc.rrc_rectamnt),null)) rc_cash_amount_mon,
+
+       max(decode(to_char(rc.rrc_rectdate,'DDMM'),to_char(to_date('30/12/2024','dd/mm/yyyy'),'DDMM'),rc.rrc_rectamnt,null)) rc_rectamnt_day,
+
+       max(decode(to_char(rc.rrc_rectdate,'DDMM'),to_char(to_date('30/12/2024','dd/mm/yyyy'),'DDMM'),decode(rc.rrc_recttype,'Q',rc.rrc_rectamnt,null),null)) rc_cheq_amount_day,
+
+       max(decode(to_char(rc.rrc_rectdate,'DDMM'),to_char(to_date('30/12/2024','dd/mm/yyyy'),'DDMM'),decode(rc.rrc_recttype,'Q',null,rc.rrc_rectamnt),null)) rc_cash_amount_day,
+
+       ---
+
+       sum(decode(to_char(rc.rrc_rectdate,'MM'),to_char(to_date('30/12/2024','dd/mm/yyyy'),'MM'),ri.rri_instramount,null)) ri_instramount_mon,
+
+       sum(decode(to_char(rc.rrc_rectdate,'MM'),to_char(to_date('30/12/2024','dd/mm/yyyy'),'MM'),decode(ri.rri_instrtype,'Q',ri.rri_instramount,null),null)) ri_cheq_amount_mon,
+
+       sum(decode(to_char(rc.rrc_rectdate,'MM'),to_char(to_date('30/12/2024','dd/mm/yyyy'),'MM'),decode(ri.rri_instrtype,'Q',null,ri.rri_instramount),null)) ri_cash_amount_mon,
+
+       sum(decode(to_char(rc.rrc_rectdate,'DDMM'),to_char(to_date('30/12/2024','dd/mm/yyyy'),'DDMM'),ri.rri_instramount,null)) ri_instramount_day,
+
+       sum(decode(to_char(rc.rrc_rectdate,'DDMM'),to_char(to_date('30/12/2024','dd/mm/yyyy'),'DDMM'),decode(ri.rri_instrtype,'Q',ri.rri_instramount,null),null)) ri_cheq_amount_day,
+
+       sum(decode(to_char(rc.rrc_rectdate,'DDMM'),to_char(to_date('30/12/2024','dd/mm/yyyy'),'DDMM'),decode(ri.rri_instrtype,'Q',null,ri.rri_instramount),null)) ri_cash_amount_day,
+
+       ---
+
+       max(decode(to_char(rc.rrc_rectdate,'MM'),to_char(to_date('30/12/2024','dd/mm/yyyy'),'MM'),null,rc.rrc_rectamnt)) rc_rectamnt_base,
+
+       max(decode(to_char(rc.rrc_rectdate,'MM'),to_char(to_date('30/12/2024','dd/mm/yyyy'),'MM'),null,decode(rc.rrc_recttype,'Q',rc.rrc_rectamnt,null))) rc_cheq_amount_base,
+
+       max(decode(to_char(rc.rrc_rectdate,'MM'),to_char(to_date('30/12/2024','dd/mm/yyyy'),'MM'),null,decode(rc.rrc_recttype,'Q',null,rc.rrc_rectamnt))) rc_cash_amount_base,
+
+       ---
+
+       sum(decode(to_char(rc.rrc_rectdate,'MM'),to_char(to_date('30/12/2024','dd/mm/yyyy'),'MM'),null,ri.rri_instramount)) ri_instramount_base,
+
+       sum(decode(to_char(rc.rrc_rectdate,'MM'),to_char(to_date('30/12/2024','dd/mm/yyyy'),'MM'),null,decode(ri.rri_instrtype,'Q',ri.rri_instramount,null))) ri_cheq_amount_base,
+
+       sum(decode(to_char(rc.rrc_rectdate,'MM'),to_char(to_date('30/12/2024','dd/mm/yyyy'),'MM'),null,decode(ri.rri_instrtype,'Q',null,ri.rri_instramount))) ri_cash_amount_base
+
+       ---
+
+  from lrri_rectinstrument ri, lrrc_receipt rc, pcl_complocation zn, prg_region rg
+
+where ri.pcm_compcode(+)=rc.pcm_compcode and ri.pcl_locatcode(+)=rc.pcl_locatcode and ri.rrc_receiptno(+)=rc.rrc_receiptno
+
+and zn.pcm_compcode=rc.pcm_compcode and zn.pcl_locatcode=rc.pcl_locatcode
+
+and rg.pcm_compcode=zn.pcm_compcode and rg.prg_regncode=zn.prg_regncode
+
+and NOT (rc.pca_account is null and rrc_recttype is null) /* to exlcude money transfer */
+
+and rc.rrc_canceltype is null
+
+and rc.rrc_rectdate between trunc(Add_Months(to_date('30/12/2024','dd/mm/yyyy'),-1),'MM') and last_day(to_date('30/12/2024','dd/mm/yyyy'))
+
+---to_date('31/12/2024','dd/mm/yyyy')
+
+group by rg.prg_regncode||'-'||rg.prg_regndesc, rc.pcl_locatcode||'-'||zn.pcl_locatdesc, rc.rrc_receiptno, rc.rrc_recttype, rc.rrc_rectdate
+
+) t
+
+--where t.pcl_locatcode='014'
+
+group by t.region, t.zone
+
+order by t.region, t.zone
