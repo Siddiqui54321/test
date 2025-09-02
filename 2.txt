@@ -1,3 +1,7 @@
+Ping 127.0.0.1 (LocalHost)                     basic test to ensure that your system's internal networking is functioning properly.
+ICMP (Internet Control Message Protocol)       type of network message used by the ping command to check if another device (host) is reachable.
+
+
 Select t.region, t.zone,
 
        Sum(Decode(nvl(ri_cash_amount_day,0), 0, nvl(rc_cash_amount_day,0), nvl(ri_cash_amount_day,0))) cash_amount_day,
@@ -95,5 +99,6 @@ group by rg.prg_regncode||'-'||rg.prg_regndesc, rc.pcl_locatcode||'-'||zn.pcl_lo
 --where t.pcl_locatcode='014'
 
 group by t.region, t.zone
+
 
 order by t.region, t.zone
