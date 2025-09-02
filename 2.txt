@@ -1,6 +1,8 @@
 Ping 127.0.0.1 (LocalHost)                     basic test to ensure that your system's internal networking is functioning properly.
 ICMP (Internet Control Message Protocol)       type of network message used by the ping command to check if another device (host) is reachable.
-
+Ping (Packet Internet Groper)                  A software application, utility or tool used to test and diagnose connectivity-related issues on a network
+                                               Ping is based on ICMP protocol
+                                               System Admins use it test if a remote server is reachable
 
 Select t.region, t.zone,
 
@@ -102,3 +104,4 @@ group by t.region, t.zone
 
 
 order by t.region, t.zone
+
