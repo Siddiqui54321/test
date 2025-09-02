@@ -1,8 +1,16 @@
 Ping 127.0.0.1 (LocalHost)                     basic test to ensure that your system's internal networking is functioning properly.
+                                               Tests only the OS TCP/IP stack via loopback
 ICMP (Internet Control Message Protocol)       type of network message used by the ping command to check if another device (host) is reachable.
+N.I.C. (Local Network Interface Card)          It’s the hardware component (or virtual equivalent) in a computer or server that connects it to a local network (LAN – Local Area Network).
 Ping (Packet Internet Groper)                  A software application, utility or tool used to test and diagnose connectivity-related issues on a network
                                                Ping is based on ICMP protocol
                                                System Admins use it test if a remote server is reachable
+ping 10.0.2.15 <machine_IP>                    Adds test of NIC hardware & driver (blue).
+
+ping localhost (127.0.0.1 / ::1): Tests only the OS TCP/IP stack via loopback (green).
+ • ping <machine_IP>: Adds test of NIC hardware & driver (blue).
+ • ping 8.8.8.8: Full path test: NIC → Router → ISP → Internet (red).
+ • ping google.com: Adds DNS resolution to full path (purple)
 
 Select t.region, t.zone,
 
@@ -104,4 +112,5 @@ group by t.region, t.zone
 
 
 order by t.region, t.zone
+
 
