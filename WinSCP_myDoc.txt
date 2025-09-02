@@ -1,2 +1,0 @@
-1. download winscp
-2. install winscp
