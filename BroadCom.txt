@@ -1,0 +1,31 @@
+open Broadcom site
+support and services
+
+document, download and support
+customer support porto
+Register
+
+
+on top cloud picture:  select VMware Cloud Foundation
+click on Free
+click on VMware Workstation Pro
+VMware Workstation pro 17.0 for Windows
+17.6.4
+check box Terms and condition
+click on cloud picture for download
+
+goto the download folder and execute VM-Ware workstation
+create new vmMachine
+select Image RockyLinex 9 (which was download before)
+check on: I will install operating system later
+Microsoft windows
+
+
+
+VM-Vare workstation is equalient to VM-Virtual Box
+
+
+
+
+
+

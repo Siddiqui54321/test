@@ -1,0 +1,50 @@
+AWS Free Tier Account - create free account
+https://aws.amazon.com/console/
+
+1.	Search bar 'EC2' then click on EC2 which is blue color
+2.	click on 'Launch INstance' in yellow
+3.	Name: myserver
+4.	Summary...Number of INstances: 2
+5.	Key pair (logic)...create new key pair...
+6.	key pair name: nitkeys...  .ppk (for use with Putty)...create key pair
+7.	create security group
+	Allow SSH traffic from
+	Allow HTTPS traffic from the internet
+	Allow HTTP triffic from the internet
+8.	Press 'Launch Instances'	
+9.	view all instances button
+10.	now see two machines...refresh button press
+11.	click 1st machine check box...connect...connect
+12.	now this is your machine (ec2 machine)...close it
+13.	open your putty, on menu bar r-click...new session...
+14.	now open aws page --- connect...
+	here is public ip and user name is ec2, copy the ip and return Putty
+15.	paest IP in IP addrss like this username@IP i.e. ec2-user@216.216.54.55 (its aws ip)
+16.	Name: aws...save...IN left column SSH...(check video 1:35)  link https://www.youtube.com/watch?v=vAIw4Nbv5_Y
+17.	sudo su -
+   	cd /var
+	ll
+	there is no HTML file 
+	dnf install httpd -y	(install the package
+ 	ll   
+	systemctl enable --now httpd
+	systemctl status httpd		now apachi http server is installed, all http, web side on web server. 
+					we install the web server, the appachi HTTP server is now installed in machine
+	cd /www
+	ll
+	pwd
+	cd html
+	ll
+	touch index.html
+	vi ... i... type here 'My name is MNS and my first webside'
+	ecs...shift:wQ!
+	open browser...copy ip and pease in browser
+18.	goback to machine putty
+	systemstl stop httpd
+19.	execute web again... so its not work because 
+	httpd service is down.
+20. start it again	systemstl restart httpd
+
+	
+
+	
