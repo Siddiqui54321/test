@@ -1,0 +1,66 @@
+https://www.redhat.com/en/services/certification/rhcsa						9july25
+https://youtube.com/playlist?list=PLhkDL3_vxQvx578rnCmjXGnJzwV5ZPuDF&si=K4h7wLmbfzgiFplT	21july25
+https://youtu.be/Om4NrHFiaBY?si=P7HpnuId90R53WqD						24July25
+https://youtu.be/TWkylnaGfnE									26July25
+https://youtu.be/VnViumqkr78									27July25
+https://youtu.be/qq-vhTwAPVo									28July25
+https://www.fox26houston.com/news/paid-apprenticeships-available-hvac-skilled-trades-help-relieve-worker-shortage	2Aug25
+https://youtu.be/XpFsMB6FoOs?feature=shared							2Aug25
+https://youtu.be/_YYdzfw1uuw			(VM Machine)					3Aug25
+https://youtu.be/aexKvm_iX_Y			(VM Provision)					3Aug25
+https://youtu.be/THKPS6z44O0			(Automation)					3Aug25
+https://youtu.be/w8hrL49P3v8?si=ju56183WPc014c3_						4Aug25
+https://www.youtube.com/watch?v=Gn3w1UvTx0A	(github)					7Aug25
+https://www.youtube.com/watch?v=ne8LrbCzW0Q	(AWS)						7Aug25
+https://www.youtube.com/watch?v=4L9crJJP5qg	(BroadCom)					7Aug25
+https://youtu.be/3fW7STcTUng									8Aug25
+https://youtu.be/a9WBduTvu30									8Aug25
+https://youtu.be/vAIw4Nbv5_Y?si=zQqQuzoc8-8rK-z-						10Aug25
+https://youtube.com/playlist?list=PLhkDL3_vxQvx578rnCmjXGnJzwV5ZPuDF&si=OmSZY6LJ_WEZrave	10Aug25
+https://youtu.be/55c7g8uj4c0									14Aug25
+https://youtu.be/gaUVa_gKsb0									15Aug25
+https://youtu.be/X83NT8OVNEI									15Aug25
+https://youtu.be/1yc5Dvp4lqI									15Aug25
+https://archive.org/details/vmware-esxi-7							16Aug25
+https://youtu.be/6PE8UMHWbAY									18Aug25
+https://youtu.be/LJvXGY4ZVKU									24Aug25
+https://www.tiktok.com/t/ZT6q6t1p2/								25Aug25	
+https://youtu.be/igJyV8HEuKk									28Aug25		
+https://youtu.be/o8432n-6bsQ			(EC2 Creation)					29Aug25	
+https://youtu.be/pBkbcH_Du5I			(WebSite Hosting)				29Aug25	
+https://youtu.be/s1LQtpR_iWs									29Aug25
+https://youtu.be/DbSLmsAvJ5Q									01Sep25
+
+			
+
+
+
+	
+
+Here’s a tree diagram of a typical Linux filesystem showing /root and /etc as parallel directories:
+
+/
+├── bin      → Essential user command binaries
+├── boot     → Boot loader files & kernel
+├── dev      → Device files
+├── etc      → System configuration files
+├── home     → Home directories for normal users
+├── lib      → Shared libraries for system programs
+├── media    → Mount point for removable media
+├── mnt      → Temporary mount point
+├── opt      → Optional software packages
+├── proc     → Virtual filesystem for process info
+├── root     → Home directory for root user
+├── run      → Runtime data
+├── sbin     → System binaries for administration
+├── srv      → Service data
+├── sys      → Virtual filesystem for system info
+├── tmp      → Temporary files
+├── usr      → User programs, libraries, docs
+└── var      → Variable data (logs, spool, etc.)
+
+📌 Parallel means: /root and /etc are both direct children of /, so they are siblings in this tree.
+
+
+How do you show Kernel Release and build information?
+$ cat /proc/version
