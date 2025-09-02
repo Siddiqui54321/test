@@ -1,7 +1,7 @@
-https://www.redhat.com/en/services/certification/rhcsa						9july25
+https://www.redhat.com/en/services/certification/rhcsa										9july25
 https://youtube.com/playlist?list=PLhkDL3_vxQvx578rnCmjXGnJzwV5ZPuDF&si=K4h7wLmbfzgiFplT	21july25
-https://youtu.be/Om4NrHFiaBY?si=P7HpnuId90R53WqD						24July25
-https://youtu.be/TWkylnaGfnE									26July25
+https://youtu.be/Om4NrHFiaBY?si=P7HpnuId90R53WqD											24July25
+https://youtu.be/TWkylnaGfnE																26July25
 https://youtu.be/VnViumqkr78									27July25
 https://youtu.be/qq-vhTwAPVo									28July25
 https://www.fox26houston.com/news/paid-apprenticeships-available-hvac-skilled-trades-help-relieve-worker-shortage	2Aug25
@@ -64,3 +64,4 @@ Here’s a tree diagram of a typical Linux filesystem showing /root and /etc as 
 
 How do you show Kernel Release and build information?
 $ cat /proc/version
+
