@@ -1,5 +1,5 @@
 --------------COPY FOLDER WITH DIRECTORIES AND FILES
-sudo useradd user1
+sudo useradd user1            (userdel -r /home/user1)-remove with dir / (rm -rf /home/abc)-forcefully remove  
 sudo passwd user1
 sudo useradd user2
 sudo passwd user2
@@ -13,6 +13,24 @@ touch abc.txt xyz.txt
 su root
 sudo cp -r /home/user1/. /home/user2
 sudo mv /home/user1/* /home/user3 		(to move dir and files to other folder)
+
+------------DELETING USER
+The userdel command can’t delete a user if they are currently logged in or have processes running. You must first stop those processes.
+
+#adduser noman
+#userdel noman	Delete the User
+#Ps –u noman  		to see all processes by the user:
+sudo kill -9 4472	Kill Specific Process (e.g. 4472)
+sudo pkill -u noman	Kill All User Processes
+sudo userdel noman	Delete the User
+sudo userdel -r noman	With deleting home directory 
+sudo rm -rf /home/abc	forcefully and recursively remove everything under /home/abc.
+getent passwd noman	verify user has deleted
+
+sudo userdel abc	Deletes the user account, but leaves the home directory
+sudo userdel -r abc	Deletes the user and their home directory.
+sudo pkill -u abc	Kills all running processes of user abc, but doesn’t remove files.
+Note: If just ran userdel without -r, their files remain in /home.
 
 ---------------------HOW DO YOU RECOVER ROOT PASSWORD
 
