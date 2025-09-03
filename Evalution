@@ -13,3 +13,15 @@ touch abc.txt xyz.txt
 su root
 sudo cp -r /home/user1/. /home/user2
 sudo mv /home/user1/* /home/user3 		(to move dir and files to other folder)
+
+---------------------HOW DO YOU RECOVER ROOT PASSWORD
+
+1. Start (Power on) the System. 
+2. Wait for GRUB menu - press e to edit. 
+3. Find the line starting with linux and type the rd.break at the end. 
+4. Press Ctrl+x
+5. mount –o remount,rw /sysroot
+6. chroot /sysroot							(change root to sysroot)
+7. touch /.autorelabel
+8. exit
+9. exit
