@@ -43,3 +43,41 @@ Note: If just ran userdel without -r, their files remain in /home.
 7. touch /.autorelabel
 8. exit
 9. exit
+
+-----------------Create user when logging the msg display: Authentication failure
+getent passwd noman		(Make sure the user was created successfully)
+sudo useradd -m noman	(If not, recreate the user)
+
+sudo passwd noman 			          (Set the password)  or
+echo "noman:abc" | sudo chpasswd	(Set the password)
+sudo passwd -S noman			        (Check Account Status)
+sudo passwd -u noman			        (If status is L (locked), unlock it)
+udo journalctl –xe		          	(Check logs for exact error messages)
+
+
+------------User Group
+A user group is a collection of users in Linux that share the same permissions for accessing files, directories, or resources.
+Why Groups Matter:
+•	Makes permission management easier.
+•	Lets you assign access to multiple users at once.
+$groups		Check Groups for the Current User
+$groups noman	Check Groups for a Specific User
+$id noman		Detailed Group Info (Using id)
+$cat /etc/group		List All Groups on the System
+$getent group		List All Groups on the System
+
+Solution: Add noman to the wheel Group
+$su –				log in as root
+#usermod -aG wheel noman	Add noman to the wheel group - This grants sudo access to the user.
+#su – noman
+$groups noman			Have noman Log Out and Back In and confirm wheel group access
+$ whoami			it show ‘noman’
+$sudo whoami			it show ‘root’		That confirms noman can now use sudo.
+$sudo grep wheel /etc/sudoers	
+
+sudo groupadd permitgroup		Create the New Group
+sudo usermod –aG permitgroup noman	add user ‘noman’ to group
+groups noman				Make sure permitgroup is listed.
+getent group permitgroup		verify it created or not
+sudo groupdel permitgroup		delete group
+
