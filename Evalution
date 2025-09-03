@@ -1,0 +1,15 @@
+--------------COPY FOLDER WITH DIRECTORIES AND FILES
+sudo useradd user1
+sudo passwd user1
+sudo useradd user2
+sudo passwd user2
+su user1
+mkdir mywork
+cd mywork
+mkdir 012025
+mkdir 022025
+cd 012025
+touch abc.txt xyz.txt
+su root
+sudo cp -r /home/user1/. /home/user2
+sudo mv /home/user1/* /home/user3 		(to move dir and files to other folder)
