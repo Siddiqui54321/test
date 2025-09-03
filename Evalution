@@ -52,7 +52,7 @@ sudo passwd noman 			          (Set the password)  or
 echo "noman:abc" | sudo chpasswd	(Set the password)
 sudo passwd -S noman			        (Check Account Status)
 sudo passwd -u noman			        (If status is L (locked), unlock it)
-udo journalctl –xe		          	(Check logs for exact error messages)
+sudo journalctl –xe		          	(Check logs for exact error messages)
 
 
 ------------User Group
