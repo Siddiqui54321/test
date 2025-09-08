@@ -1,0 +1,122 @@
+#adduser noman
+#userdel noman               Delete the User
+#rm -rf /home/abc  forcefully and recursively remove everything under /home/abc.
+#getent passwd noman   verify user has deleted
+#usermod -aG wheel noman       Add noman to the wheel group - This grants sudo access to the user.
+$chmod 777 user1file.txt	add full permission
+$chmod u-r user1file.txt	exclue user read permission
+$chmod u+r user1file.txt	exclue user read permission
+
+chown: to change user ownership
+chgrp: to change group ownership
+
+
+#Ps –u noman                    to see all processes by the user:
+sudo kill -9 4472                Kill Specific Process (e.g. 4472)
+sudo pkill -u noman        Kill All User Processes
+sudo userdel noman       Delete the User
+sudo userdel -r noman   With deleting home directory
+sudo rm -rf /home/abc  forcefully and recursively remove everything under /home/abc.
+getent passwd noman   verify user has deleted
+ 
+sudo userdel abc              Deletes the user account, but leaves the home directory
+sudo userdel -r abc          Deletes the user and their home directory.
+sudo pkill -u abc                Kills all running processes of user abc, but doesn’t remove files.
+Note: If just ran userdel without -r, their files remain in /home.
+
+
+y
+File Permissions:
+7 type of file permission:
+#ls -l
+read,write,execute
+
+Ansable: 
+Ansable Tower:
+id bob   bob is user, group is bob
+#useradd ansadmin2
+#passwd asnadmin2
+#ll
+#userdel bob     only account deleted  (passwd, shadow, group)
+#userdel -r bob   del account + directory + mail 
+
+/etc/passwd, /etc/shadow, /.etc/group, dir is created, mail spool
+
+cronjob  as root, cronjob as user
+#dh -h /data    output.txt
+#rm -rf nadee, redhat    delete file 
+
+
+
+cat /etc/passwd | grep sarah
+
+rwx  = 7
+rwx --- --- = 7 0 0 
+ls read
+#umask command tempreary    --0022
+Change permission:
+A/bsolute mode: 
+Symbolic mode:
+#chmod 
+#chown  change ownership:group
+#chown ownership:group
+#chown ownership
+#shown group
+#chown 
+user bob, now he is the member of NIT group
+bob has ownership of file#
+
+
+#chown bob:nit test.sh
+#stat /root
+
+read
+write
+execute
+suid
+guid
+sticky bit
+ACL
+
+
+$stat test.sh
+A NIT group only that member have permission to rwx
+add group
+
+
+---------07/09/2025
+0	e
+2	w
+4	r
+full access means 777 dir  owner
+
+#groupadd testers     bob and sarah are in testers group
+#cd /home
+#useradd sarah -u  specific id
+#cat /etc/passwd   to check id here find next id
+#usermod sarah -aG Testersu    add sarah to add in testers group
+#usermod bob -aG Testers
+#getent group Testers
+#userad user1
+#passwd
+#cd home
+#su - user1
+$touch testfile
+$mkdir testdir
+here user1 has full access
+$chown zawar testfile    not permitted
+$sudo shown zawar testfile	this incident will be reported
+$su - user1
+$chmood 777 testfile
+$ls -l testfile      full access
+
+
+
+
+
+
+
+
+
+
+
