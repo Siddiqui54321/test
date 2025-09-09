@@ -1,3 +1,91 @@
+Assume:
+
+user1 created: /home/user1/secret.txt
+
+You want user2 to read secret.txt
+
+1. Check current permissions (as root or user1):
+ls -ld /home/user1
+ls -l /home/user1/secret.txt
+
+
+Default output likely:
+
+drwx------  user1 user1 4096 ... /home/user1
+-rw-------  user1 user1 ... secret.txt
+
+
+This means only user1 can enter the directory and read the file.
+
+
+-------------
+2. Option A: Use a shared directory
+
+Best practice: create a folder inside /home/user1 with limited access, like this:
+
+# As user1
+mkdir /home/user1/shared
+chmod 755 /home/user1/shared
+cp /home/user1/secret.txt /home/user1/shared/
+chmod 644 /home/user1/shared/secret.txt
+
+
+755 on shared allows others to enter the directory.
+
+644 on secret.txt allows others to read the file.
+
+Now, user2 can access:
+
+cat /home/user1/shared/secret.txt
+
+--------------
+3. Option B: Give full access to home dir (not recommended)
+
+If you must let user2 access all of /home/user1, change home dir permissions:
+
+chmod 755 /home/user1
+chmod 644 /home/user1/secret.txt
+
+
+⚠️ Security Risk: This exposes all of user1’s files to read access by others. Avoid unless intentional.
+
+✅ 4. Alternative: Use a group (advanced)
+
+Create a group (e.g., sharedgroup)
+
+Add both users to it
+
+Set group ownership and permissions
+
+Example:
+
+# As root
+groupadd sharedgroup
+usermod -aG sharedgroup user1
+usermod -aG sharedgroup user2
+
+# As user1
+mkdir /home/user1/shared
+chgrp sharedgroup /home/user1/shared
+chmod 770 /home/user1/shared
+
+cp /home/user1/secret.txt /home/user1/shared/
+chgrp sharedgroup /home/user1/shared/secret.txt
+chmod 660 /home/user1/shared/secret.txt
+
+
+Now only users in sharedgroup can access /home/user1/shared/secret.txt.
+
+
+
+
+
+
+
+
+
+
+
 #adduser noman
 #userdel noman               Delete the User
 #rm -rf /home/abc  forcefully and recursively remove everything under /home/abc.
@@ -109,6 +197,7 @@ $sudo shown zawar testfile	this incident will be reported
 $su - user1
 $chmood 777 testfile
 $ls -l testfile      full access
+
 
 
 
