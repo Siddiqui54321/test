@@ -1,3 +1,55 @@
+https://www.youtube.com/watch?v=Et2cvQvIyUY
+-----------------file permission to all other users
+#useradd u1
+#suer passwd u1
+#su - u1
+$touch abc.txt
+$ls -l /home/u1
+$ls -l /home/abc.txt
+$exit			exit back to root
+#useradd u2
+#passwd u2
+#su - u2
+$chmod 755 /home/u1
+$mkdir /home/u1/shared
+$cp /home/u1/abc.txt /home/u1/shared 
+$chmod 777 /home/u1/shared/abc.txt
+----Now u2 can modify the file  
+
+-----------------file permission to groups
+#useradd u1
+#passwd u1
+#useradd u2
+#passwd u2
+$mkdir /home/u1/shared
+$echo "this is user u1 work" > /home/u1/shared/abc.txt
+#groupadd mygroup
+#usermod -aG sharedgroup u1
+#usermod -aG sharedgroup u2
+
+#chgrp mygroup /home/u1/shared
+#chmod 770 /home/u1/shared
+#chgrp mygroup /home/u1/shared/abc.txt
+#chmod 660 /home/u1/shared/abc.txt
+
+
+#groupadd mygroup    #getent group mygroup     #groupdel mygroup
+#usermod -aG sharedgroup u1
+#usermod -aG sharedgroup u2
+$mkdir /home/u1/shared
+$echo "this is my work" > /home/u1/shared/abc.txt
+
+
+------------make sudo user
+wheel group that grants suo privileges.
+#sudo usermod -aG wheel u1 (make sudo user)		
+$sudo whoami (check)
+$groups u1 (check)
+$sudo gpasswd -d u1 wheel (remove sudo)
+
+
+
+
 Assume:
 
 user1 created: /home/user1/secret.txt
@@ -197,6 +249,7 @@ $sudo shown zawar testfile	this incident will be reported
 $su - user1
 $chmood 777 testfile
 $ls -l testfile      full access
+
 
 
 
