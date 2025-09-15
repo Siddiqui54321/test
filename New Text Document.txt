@@ -1,4 +1,100 @@
+#ansible --version
+#ls /etc			to check ansible folder on machine
+#ll /etc | greb ansible		no result its means no ansible
+#
+
+--GROUPS
+-used to manage permissions (read, write, execute) for multiple users at once.
+
+User and Group Relationships
+A user can be in one primary group and multiple secondary groups.
+Primary group is defined at user creation (or with usermod -g).
+Secondary groups are assigned via usermod -aG or gpasswd.
+
+-Primary group (one per user) - Default group - when user create new file
+ (defined in /etc/passwd)	
+	-every user must have one primary group
+	-stored in /etc/passwd file as the user's GID (group ID)
+-Secondary (or supplementary) group (zero or more per user)
+ (defined in /etc/group)
+	-secondary groups belongs to user, do not effect file creation but grant access to files or devices shared by those groups
+	-A user can be part of many secondary groups - no limit
+
+Command			Description			Example
+#getent group		list all groups
+#groups u1		specifig user groups
+#id u1			detailed info i.e. 10
+#getent group 10	wheel:x:10:sysadmin,noman,user1
+#cat /etc/group		view group file directly
+#cut -d: -f1 /etc/group	list group names only
+#getent group wheel	search specific group
+#getent group | grep '^w'	starting with w (group and attached users)
+#group '^w' /etc/group		local groups only
+#newgrp wheel			
+#groupadd mygroup
+#groupdel mygroup
+#usermod -aG mygroup u1		add user u1 to mygroup
+#groups
+#newgrp 		developers	temporarily changes active group
+
+Add a New Group
+sudo groupadd developers
+Add a User to a Group
+sudo usermod -aG developers alice
+Remove a User from a Group
+sudo gpasswd -d alice developers
+View All Groups for a User
+groups alice
+Rename a Group
+sudo groupmod -n devs developers
+
+
+groupadd	Create a new group		sudo groupadd developers
+groupdel	Delete a group			sudo groupdel developers
+groupmod	rename a group 			sudo groupmod -n devs developers
+groups		Show groups a user belongs to	groups alice
+id		Show UID, GID, and groups of a user	id alice
+gpasswd		Administer /etc/group (add/remove users from group)	sudo gpasswd -a alice developers
+usermod		Modify a user’s group memberships	sudo usermod -aG developers alice
+newgrp		Log in to a new group temporarily (changes current group ID)	newgrp developers
+getent group	View all groups (from /etc/group or network source)	getent group
+cat /etc/group	View local group file directly				cat /etc/group
+
+-----------------file permission to groups
+#useradd u1
+#passwd u1
+#useradd u2
+#passwd u2
+$mkdir /home/u1/shared
+$echo "this is user u1 work" > /home/u1/shared/abc.txt
+#usermod -aG sharedgroup u1
+#usermod -aG sharedgroup u2
+
+#chgrp mygroup /home/u1/shared
+#chmod 770 /home/u1/shared
+#chgrp mygroup /home/u1/shared/abc.txt
+#chmod 660 /home/u1/shared/abc.txt
+
+
+#groupadd mygroup    #getent group mygroup     #groupdel mygroup
+#usermod -aG sharedgroup u1
+#usermod -aG sharedgroup u2
+$mkdir /home/u1/shared
+$echo "this is my work" > /home/u1/shared/abc.txt
+
+
+
 https://www.youtube.com/watch?v=Et2cvQvIyUY
+https://www.youtube.com/watch?v=vo9F_l_wwZs&list=PL0tP8lerTbX3eUtBFS0Ir4_aFqKuXWjYZ&index=71
+
+----------------File permission ACL 
+$getfacl abc.txt	(to check permission)
+$setfacl -m u:u2:rwx abc.txt  (adding permission for user)
+$setfacl -m g:mygroup:rwx abc.txt (add permission to group) -m means modification
+$setfact -x u:u2 abc.txt   (to remove user permission)
+$setfact -b abc.txt (to remove all entries like group)
+$setfact -Rm u:u2:rw myfolder/    (adding permission for u2 in all files inside folder)
+$ls -ltr
 -----------------file permission to all other users
 #useradd u1
 #suer passwd u1
@@ -50,83 +146,9 @@ $sudo gpasswd -d u1 wheel (remove sudo)
 
 
 
-Assume:
-
-user1 created: /home/user1/secret.txt
-
-You want user2 to read secret.txt
-
-1. Check current permissions (as root or user1):
-ls -ld /home/user1
-ls -l /home/user1/secret.txt
 
 
-Default output likely:
 
-drwx------  user1 user1 4096 ... /home/user1
--rw-------  user1 user1 ... secret.txt
-
-
-This means only user1 can enter the directory and read the file.
-
-
--------------
-2. Option A: Use a shared directory
-
-Best practice: create a folder inside /home/user1 with limited access, like this:
-
-# As user1
-mkdir /home/user1/shared
-chmod 755 /home/user1/shared
-cp /home/user1/secret.txt /home/user1/shared/
-chmod 644 /home/user1/shared/secret.txt
-
-
-755 on shared allows others to enter the directory.
-
-644 on secret.txt allows others to read the file.
-
-Now, user2 can access:
-
-cat /home/user1/shared/secret.txt
-
---------------
-3. Option B: Give full access to home dir (not recommended)
-
-If you must let user2 access all of /home/user1, change home dir permissions:
-
-chmod 755 /home/user1
-chmod 644 /home/user1/secret.txt
-
-
-⚠️ Security Risk: This exposes all of user1’s files to read access by others. Avoid unless intentional.
-
-✅ 4. Alternative: Use a group (advanced)
-
-Create a group (e.g., sharedgroup)
-
-Add both users to it
-
-Set group ownership and permissions
-
-Example:
-
-# As root
-groupadd sharedgroup
-usermod -aG sharedgroup user1
-usermod -aG sharedgroup user2
-
-# As user1
-mkdir /home/user1/shared
-chgrp sharedgroup /home/user1/shared
-chmod 770 /home/user1/shared
-
-cp /home/user1/secret.txt /home/user1/shared/
-chgrp sharedgroup /home/user1/shared/secret.txt
-chmod 660 /home/user1/shared/secret.txt
-
-
-Now only users in sharedgroup can access /home/user1/shared/secret.txt.
 
 
 
@@ -140,6 +162,7 @@ Now only users in sharedgroup can access /home/user1/shared/secret.txt.
 
 #adduser noman
 #userdel noman               Delete the User
+#userdel -r noman               Delete the User
 #rm -rf /home/abc  forcefully and recursively remove everything under /home/abc.
 #getent passwd noman   verify user has deleted
 #usermod -aG wheel noman       Add noman to the wheel group - This grants sudo access to the user.
@@ -150,7 +173,7 @@ $chmod u+r user1file.txt	exclue user read permission
 chown: to change user ownership
 chgrp: to change group ownership
 
-
+----------------DELETING	Note: some time user's having file in /var/mail directory
 #Ps –u noman                    to see all processes by the user:
 sudo kill -9 4472                Kill Specific Process (e.g. 4472)
 sudo pkill -u noman        Kill All User Processes
@@ -249,8 +272,6 @@ $sudo shown zawar testfile	this incident will be reported
 $su - user1
 $chmood 777 testfile
 $ls -l testfile      full access
-
-
 
 
 
