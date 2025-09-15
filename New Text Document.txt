@@ -1,3 +1,27 @@
+--Dir
+mkdir shared 
+rmdir shared
+rm -r shared 	(Directory with contents)
+rm -rf shared	(Directory - force delete)
+ls -R abc		(to see what is inside the dir shared)
+
+--File
+echo > abc.txt
+touch abc.txt xyz.txt
+rm abc.txt				(normal delete)
+rm -f abc.txt			(no confirmation)
+sudo rm -f abc.txt		(If You See: Permission denied) and (have admin access), 
+
+--Users
+useradd u1
+userwd u1
+userdel -r u1			remove user with dir and files
+
+
+
+
+
+
 #ansible --version
 #ls /etc			to check ansible folder on machine
 #ll /etc | greb ansible		no result its means no ansible
@@ -272,6 +296,7 @@ $sudo shown zawar testfile	this incident will be reported
 $su - user1
 $chmood 777 testfile
 $ls -l testfile      full access
+
 
 
 
