@@ -1,21 +1,84 @@
---Dir
+------Directory
 mkdir shared 
 rmdir shared
 rm -r shared 	(Directory with contents)
 rm -rf shared	(Directory - force delete)
 ls -R abc		(to see what is inside the dir shared)
 
---File
+------File
 echo > abc.txt
 touch abc.txt xyz.txt
 rm abc.txt				(normal delete)
 rm -f abc.txt			(no confirmation)
 sudo rm -f abc.txt		(If You See: Permission denied) and (have admin access), 
 
---Users
+------Users
 useradd u1
 userwd u1
+userdel u1
 userdel -r u1			remove user with dir and files
+--
+getent passwd u1		Check if the user u1 exists	
+rm -f /var/mail/u1		Remove the old mailbox file
+--
+sudo useradd -m noman   (If not, recreate the user)
+
+--User Issue (user u1 not shows in /home but its already created)
+	sudo mkdir /home/u1			(Create the directory)
+	sudo chown u1:u1 /home/u1	(Set ownership to user u1)
+	sudo chmod 755 /home/u1		(ive proper access permissions)
+--Delete the user and re-create it properly
+	sudo userdel u1
+	sudo rm -rf /home/u1 /var/mail/u1
+	sudo useradd -m u1
+	sudo passwd u1
+	-m tells it to create /home/u1
+	passwd u1 sets the user password
+--Confirm Everything
+	getent passwd u1	(Check user exists:)			u1:x:1001:1001::/home/u1:/bin/bash
+	ls -ld /home/u1		(Check home directory exists)	drwxr-xr-x  2 root root 4096 Sep 15 10:00 /home/u1
+
+
+------------------------------------------------------------------
+
+
+
+
+
+
+#ls /home - it returen
+sysadmin 	u1	
+how can I know u1 is user or directory
+
+inet 127.0.0.1/8 scope host lo
+
+1. reboot VM
+2. At the GRUB boot menu, quickly press e to edit the default boot entry.
+3. Find the line starting with linux	i.e. linux /vmlinuz-... ro ...
+4. Replace ro (read-only) with rw (read-write)
+5. Press Ctrl + X or F10 to boot with these changes.
+6. If for some reason it’s still read-only:
+	mount -o remount,rw /
+7. passwd 	(Reset the Password)
+8. Relabel SELinux (important)
+	touch /.autorelabel
+9. Reboot the System
+	exec /sbin/init		or   reboot -f
+	
+
+
+
+Is SSH Running on the VM?
+sudo systemctl status sshd
+sudo systemctl start sshd
+sudo systemctl enable sshd
+sudo dnf install -y openssh-server	(If it’s not installed)
+
+Firewall Might Be Blocking Port 22
+sudo firewall-cmd --list-all	(Check firewall status)
+
+
+
 
 
 
@@ -185,7 +248,7 @@ $sudo gpasswd -d u1 wheel (remove sudo)
 
 
 #adduser noman
-#userdel noman               Delete the User
+#usencpardel noman               Delete the User
 #userdel -r noman               Delete the User
 #rm -rf /home/abc  forcefully and recursively remove everything under /home/abc.
 #getent passwd noman   verify user has deleted
@@ -296,6 +359,7 @@ $sudo shown zawar testfile	this incident will be reported
 $su - user1
 $chmood 777 testfile
 $ls -l testfile      full access
+
 
 
 
