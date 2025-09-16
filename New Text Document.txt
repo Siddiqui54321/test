@@ -1,3 +1,32 @@
+------------------------------------------------------------
+-create user u1 
+-make dir in /home/work by user u1
+-create file a.txt in /home/work by user u1
+-assign permission to u1 to edit a.txt
+-create another user u2
+-give the right to edit a.txt
+
+#useradd u1
+#passwd u1
+#mkdir /home/work
+#chown u1:u1 /home/work
+#su - u1
+$cd /home/work
+$echo 'testing' > a.txt
+#useradd u2
+#passwd u2
+u1 and u2 can both edit /home/work/a.txt
+File is protected from other users
+#groupadd workgroup
+#usermod -aG workgroup u1
+#usermod -aG workgroup u2
+#chown :workgroup /home/work/a.txt
+#chmod 664 /home/work/a.txt
+#chown :workgroup /home/work
+#chmod 775 /home/work
+------------------------------------------------------------
+
+
 ------Directory
 mkdir shared 
 rmdir shared
@@ -359,6 +388,7 @@ $sudo shown zawar testfile	this incident will be reported
 $su - user1
 $chmood 777 testfile
 $ls -l testfile      full access
+
 
 
 
