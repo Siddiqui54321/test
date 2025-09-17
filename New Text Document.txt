@@ -1,3 +1,6 @@
+#chown u1:u1 /home/work
+#chown :workgroup /home/work
+#chown :workgroup /home/work/a.txt
 ------------------------------------------------------------
 -create user u1 
 -make dir in /home/work by user u1
@@ -364,7 +367,7 @@ add group
 
 
 ---------07/09/2025
-0	e
+1	e
 2	w
 4	r
 full access means 777 dir  owner
@@ -388,6 +391,7 @@ $sudo shown zawar testfile	this incident will be reported
 $su - user1
 $chmood 777 testfile
 $ls -l testfile      full access
+
 
 
 
