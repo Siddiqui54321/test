@@ -424,6 +424,23 @@ Now from window:	ssh - 2222 root@127.0.0.1
 
 
 
+ec2-user@172.31.40.22
+
+
+SHELL: 	provide an environment to user to execute commands and interact with kernel.
+	Application -- shell-- kernal --hardward
+
+Hypervisor: 	A hypervisor, also known as a virtual machine monitor (VMM), is software 
+		or firmware that allows multiple virtual machines (VMs) to run on a single 
+		physical machine.
+
+		In simple terms:
+
+		A hypervisor acts like a middleman between the hardware (CPU, memory, storage, 
+		etc.) and multiple operating systems running on virtual machines. Each VM 
+		behaves like a separate computer, even though they all share the same physical 
+		hardware. 
+
 
 
 
