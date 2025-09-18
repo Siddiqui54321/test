@@ -1,3 +1,4 @@
+
 #chown u1:u1 /home/work
 #chown :workgroup /home/work
 #chown :workgroup /home/work/a.txt
@@ -391,6 +392,30 @@ $sudo shown zawar testfile	this incident will be reported
 $su - user1
 $chmood 777 testfile
 $ls -l testfile      full access
+
+
+SSH is not working from windows:
+*	ping 10.0.2.15
+*	ss -tlnp | grep :22		(check if ssh is listening) if 127.0.0.1:22, only listening on localhost 
+							(not accessible from outside)
+*	vi /etc/ssh/sshd_config	replace 'ListenAddress 127.0.0.1 to ListenAddress 0.0.0.0)
+*	save and restart SSH
+*	sudo systemctl restart ssh
+*Check VM network Mode
+	If using NAT mode: VM has privae IP (10.0.2.15) cannot ssh
+	Add port forwarding
+	1. power of the VM
+	2. VM setting--Network--adapter 1--NAT
+	3. Advanced -- Port Forwarding
+	4. Add new line:
+		Name: SSH
+		Protocol: TCP
+		Host IP: 2222
+		Guest IP:  10.0.2.15
+		GUest Port: 22
+Now from window:	ssh - 2222 root@127.0.0.1
+		
+
 
 
 
