@@ -1,3 +1,7 @@
+Give sudo rights to user u1:    #usermod -aG wheel u1
+Copy file:						#cp 
+
+
 File Management – Key Topics (Rocky Linux / RHEL)
 
 1. Understanding the Linux Filesystem Hierarchy
@@ -729,6 +733,7 @@ $sudo shown zawar testfile	this incident will be reported
 $su - user1
 $chmood 777 testfile
 $ls -l testfile      full access
+
 
 
 
