@@ -393,7 +393,7 @@ $su - user1
 $chmood 777 testfile
 $ls -l testfile      full access
 
-
+-------------------------------------------------------------------------------------------
 SSH is not working from windows:
 *	ping 10.0.2.15
 *	ss -tlnp | grep :22		(check if ssh is listening) if 127.0.0.1:22, only listening on localhost 
@@ -413,9 +413,11 @@ SSH is not working from windows:
 		Host IP: 2222
 		Guest IP:  10.0.2.15
 		GUest Port: 22
-Now from window:	ssh - 2222 root@127.0.0.1
-		
-
+Now from window:	ssh -p 2222 root@127.0.0.1
+ssh is the command to start an SSH connection.
+-p 2222 tells it to use port 2222 instead of the default (22).
+root@127.0.0.1 is the user (root) and the host (127.0.0.1 = localhost).		
+-------------------------------------------------------------------------------------------
 
 
 
@@ -440,6 +442,7 @@ Hypervisor: 	A hypervisor, also known as a virtual machine monitor (VMM), is sof
 		etc.) and multiple operating systems running on virtual machines. Each VM 
 		behaves like a separate computer, even though they all share the same physical 
 		hardware. 
+
 
 
 
