@@ -9,6 +9,11 @@ File Management – Key Topics (Rocky Linux / RHEL)
 2. Basic File & Directory Commands
 	Task				Command
 	*List files			ls, ls -l, ls -a, ls -lh, ls -ld
+						ls 		– List files and folders.
+						ls -l 	– Long listing with details (permissions, size, date).
+						ls -a 	– Show all files, including hidden ones.
+						ls -ld – Show info about the directory itself, not contents.
+						ls -lh – Long list with human-readable sizes (KB, MB).
 	*Copy files			cp file1 file2, cp -r dir1 dir2
 	*Move/Rename			mv old new
 	*Delete files		rm file, rm -r dir
@@ -158,6 +163,120 @@ Rocky Linux: File Permission – Exam Preparation Guide
 		chmod +t /shared
 
 
+-------------------------------------------------------------------------------
+Rocky Linux Exam Preparation Guide: File Permission & Disk Management
+
+Section 1: File Permissions
+	1.1 File Permission Basics
+	
+	Every file and directory in Linux has 3 types of permissions for 3 categories of users:
+
+	Category		Symbol		Description
+	User (owner)	u			Creator of the file
+	Group			g			Group associated with the file
+	Others			o			All other users
+
+	Permission		Symbol		Description
+	Read			r			View file contents
+	Write			w			Modify file contents
+	Execute			x			Execute file as a program
+
+	1.2 Viewing Permissions
+	ls -l
+	Example:
+	-rwxr-xr-- 1 user group 1234 Sep 19 09:00 myscript.sh
+
+	1.3 Changing Permissions
+		chmod – Change permissions
+
+		Symbolic method:
+			chmod u+x myfile.sh   # Add execute for user
+			chmod g-w myfile.sh   # Remove write from group
+			chmod o=r myfile.sh   # Set read-only for others
+	
+		Numeric method:
+			r = 4, w = 2, x = 1 → Sum = permission
+			chmod 755 myfile.sh   # rwxr-xr-x
+			chmod 644 mydoc.txt   # rw-r--r--
+
+	chown – Change ownership
+		chown user:group filename
+
+	chgrp – Change group
+		chgrp newgroup filename
+
+
+🗄️ Section 2: Disk Management
+	2.1 Viewing Disk Usage
+		df – Report disk space usage
+		df -h
+
+		du – Report file space usage
+		du -sh /path/to/directory
+
+	2.2 Managing Partitions
+		lsblk – List block devices
+		
+		fdisk – Partitioning tool (MBR)
+			fdisk /dev/sdX
+
+		parted – Partitioning tool (GPT)
+			parted /dev/sdX
+
+	2.3 Filesystem Operations
+		Format a partition
+			mkfs.ext4 /dev/sdX1
+
+		Mounting a partition
+			mount /dev/sdX1 /mnt
+
+		Unmounting
+			umount /mnt
+
+		Add permanent mount (edit /etc/fstab)
+		Example:
+			/dev/sdb1  /data  ext4  defaults  0  2
+
+	2.4 Logical Volume Management (LVM)
+		Basic LVM Workflow
+			Create physical volume (PV)
+				pvcreate /dev/sdX
+			Create volume group (VG)
+				vgcreate my_vg /dev/sdX
+			Create logical volume (LV)
+				lvcreate -L 5G -n my_lv my_vg
+			Format and mount
+				mkfs.ext4 /dev/my_vg/my_lv
+				mount /dev/my_vg/my_lv /mnt
+			Extend LV
+				lvextend -L +1G /dev/my_vg/my_lv
+				resize2fs /dev/my_vg/my_lv
+
+🔐 Extra: Special File Permissions
+Special Bit	Use	Command	Symbol
+SUID	Run as file owner	chmod u+s filename	s in user
+SGID	Run as group	chmod g+s dirname	s in group
+Sticky Bit	Restrict file deletion	chmod +t /tmp	t in others
+
+Example:
+
+chmod 1777 /shared  # Sticky bit for shared dir
+
+📋 Exam Tips
+
+Understand symbolic vs numeric permissions.
+
+Practice changing ownerships and groups.
+
+Know how to create, mount, and format partitions.
+
+Be able to extend and manage LVM.
+
+Edit /etc/fstab safely – one typo can break boot!
+
+Use man pages in the exam if allowed (man chmod, man fstab, etc.).
+
+Try tasks in a Rocky Linux VM or lab environment.
 
 
 
@@ -610,6 +729,7 @@ $sudo shown zawar testfile	this incident will be reported
 $su - user1
 $chmood 777 testfile
 $ls -l testfile      full access
+
 
 
 
