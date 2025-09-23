@@ -451,3 +451,19 @@ Hypervisor: 	A hypervisor, also known as a virtual machine monitor (VMM), is sof
 
 
 
+
+
+1. Check if sshd (the SSH server) is installed
+Run: #rpm -q openssh-server
+If installed, it will return something like:
+openssh-server-8.7p1-36.el9.x86_64
+If not installed, it will say:
+package openssh-server is not installed
+
+#systemctl status sshd	(Check if SSH is running)
+#ss -tuln | grep :22	 or #netstat -tuln | grep :22	(Check if SSH port is open (usually port 22))
+
+#sudo dnf install -y openssh-server	(if not installed)
+sudo systemctl enable sshd –now	(must enable the serices>
+
+
