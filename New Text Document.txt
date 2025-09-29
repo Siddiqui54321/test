@@ -3,6 +3,21 @@
 #chown :workgroup /home/work
 #chown :workgroup /home/work/a.txt
 ------------------------------------------------------------
+hard links:
+	another name pointing to the same file data.
+	Deleting one name doesn’t delete the data until all links are removed
+#echo "this is original file" > f1.txt
+#ln f1.txt f2.txt							(create hard link)
+#ls -i f1.txt f2.txt						(check inode numbers, found same numbers/address)
+#echo "this is added through hard link" > f1.txt
+#cat f1.txt f2.txt  						(found save changes in both files)
+
+soft links:
+	It’s a flexible way to link files or even directories
+	But: If the original file moves or is deleted, the soft link stops working
+
+
+------------------------------------------------------------
 -create user u1 
 -make dir in /home/work by user u1
 -create file a.txt in /home/work by user u1
@@ -154,6 +169,7 @@ Command			Description			Example
 #groupadd mygroup
 #groupdel mygroup
 #usermod -aG mygroup u1		add user u1 to mygroup
+$sudo gpasswd -d u1 wheel	remove user u1 from group
 #groups
 #newgrp 		developers	temporarily changes active group
 
@@ -207,7 +223,7 @@ $echo "this is my work" > /home/u1/shared/abc.txt
 https://www.youtube.com/watch?v=Et2cvQvIyUY
 https://www.youtube.com/watch?v=vo9F_l_wwZs&list=PL0tP8lerTbX3eUtBFS0Ir4_aFqKuXWjYZ&index=71
 
-----------------File permission ACL 
+----------------File permission ACL (access control list>
 $getfacl abc.txt	(to check permission)
 $setfacl -m u:u2:rwx abc.txt  (adding permission for user)
 $setfacl -m g:mygroup:rwx abc.txt (add permission to group) -m means modification
@@ -465,5 +481,6 @@ package openssh-server is not installed
 
 #sudo dnf install -y openssh-server	(if not installed)
 sudo systemctl enable sshd –now	(must enable the serices>
+
 
 
