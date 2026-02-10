@@ -1,0 +1,13 @@
+1.	Open Command Prompt / PowerShell
+		>git –version
+2.	Chose Your Virsion Control Folder, it better to create new folder for testing
+		>mkdir MyGitProject
+		>cd MyGitProject
+3.	Initialize Git to start tracking this folder.
+		>git init	--A hidden .git folder is created
+4.	Check file status
+		>dir /a
+		>git status			
+		
+		
+	
