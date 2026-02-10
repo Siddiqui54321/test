@@ -1,0 +1,469 @@
+
+#chown u1:u1 /home/work
+#chown :workgroup /home/work
+#chown :workgroup /home/work/a.txt
+------------------------------------------------------------
+-create user u1 
+-make dir in /home/work by user u1
+-create file a.txt in /home/work by user u1
+-assign permission to u1 to edit a.txt
+-create another user u2
+-give the right to edit a.txt
+
+#useradd u1
+#passwd u1
+#mkdir /home/work
+#chown u1:u1 /home/work
+#su - u1
+$cd /home/work
+$echo 'testing' > a.txt
+#useradd u2
+#passwd u2
+u1 and u2 can both edit /home/work/a.txt
+File is protected from other users
+#groupadd workgroup
+#usermod -aG workgroup u1
+#usermod -aG workgroup u2
+#chown :workgroup /home/work/a.txt
+#chmod 664 /home/work/a.txt
+#chown :workgroup /home/work
+#chmod 775 /home/work
+------------------------------------------------------------
+
+
+------Directory
+mkdir shared 
+rmdir shared
+rm -r shared 	(Directory with contents)
+rm -rf shared	(Directory - force delete)
+ls -R abc		(to see what is inside the dir shared)
+
+------File
+echo > abc.txt
+touch abc.txt xyz.txt
+rm abc.txt				(normal delete)
+rm -f abc.txt			(no confirmation)
+sudo rm -f abc.txt		(If You See: Permission denied) and (have admin access), 
+
+------Users
+useradd u1
+userwd u1
+userdel u1
+userdel -r u1			remove user with dir and files
+--
+getent passwd u1		Check if the user u1 exists	
+rm -f /var/mail/u1		Remove the old mailbox file
+--
+sudo useradd -m noman   (If not, recreate the user)
+
+--User Issue (user u1 not shows in /home but its already created)
+	sudo mkdir /home/u1			(Create the directory)
+	sudo chown u1:u1 /home/u1	(Set ownership to user u1)
+	sudo chmod 755 /home/u1		(ive proper access permissions)
+--Delete the user and re-create it properly
+	sudo userdel u1
+	sudo rm -rf /home/u1 /var/mail/u1
+	sudo useradd -m u1
+	sudo passwd u1
+	-m tells it to create /home/u1
+	passwd u1 sets the user password
+--Confirm Everything
+	getent passwd u1	(Check user exists:)			u1:x:1001:1001::/home/u1:/bin/bash
+	ls -ld /home/u1		(Check home directory exists)	drwxr-xr-x  2 root root 4096 Sep 15 10:00 /home/u1
+
+
+------------------------------------------------------------------
+
+
+
+
+
+
+#ls /home - it returen
+sysadmin 	u1	
+how can I know u1 is user or directory
+
+inet 127.0.0.1/8 scope host lo
+
+1. reboot VM
+2. At the GRUB boot menu, quickly press e to edit the default boot entry.
+3. Find the line starting with linux	i.e. linux /vmlinuz-... ro ...
+4. Replace ro (read-only) with rw (read-write)
+5. Press Ctrl + X or F10 to boot with these changes.
+6. If for some reason it’s still read-only:
+	mount -o remount,rw /
+7. passwd 	(Reset the Password)
+8. Relabel SELinux (important)
+	touch /.autorelabel
+9. Reboot the System
+	exec /sbin/init		or   reboot -f
+	
+
+
+
+Is SSH Running on the VM?
+sudo systemctl status sshd
+sudo systemctl start sshd
+sudo systemctl enable sshd
+sudo dnf install -y openssh-server	(If it’s not installed)
+
+Firewall Might Be Blocking Port 22
+sudo firewall-cmd --list-all	(Check firewall status)
+
+
+
+
+
+
+
+
+
+#ansible --version
+#ls /etc			to check ansible folder on machine
+#ll /etc | greb ansible		no result its means no ansible
+#
+
+--GROUPS
+-used to manage permissions (read, write, execute) for multiple users at once.
+
+User and Group Relationships
+A user can be in one primary group and multiple secondary groups.
+Primary group is defined at user creation (or with usermod -g).
+Secondary groups are assigned via usermod -aG or gpasswd.
+
+-Primary group (one per user) - Default group - when user create new file
+ (defined in /etc/passwd)	
+	-every user must have one primary group
+	-stored in /etc/passwd file as the user's GID (group ID)
+-Secondary (or supplementary) group (zero or more per user)
+ (defined in /etc/group)
+	-secondary groups belongs to user, do not effect file creation but grant access to files or devices shared by those groups
+	-A user can be part of many secondary groups - no limit
+
+Command			Description			Example
+#getent group		list all groups
+#groups u1		specifig user groups
+#id u1			detailed info i.e. 10
+#getent group 10	wheel:x:10:sysadmin,noman,user1
+#cat /etc/group		view group file directly
+#cut -d: -f1 /etc/group	list group names only
+#getent group wheel	search specific group
+#getent group | grep '^w'	starting with w (group and attached users)
+#group '^w' /etc/group		local groups only
+#newgrp wheel			
+#groupadd mygroup
+#groupdel mygroup
+#usermod -aG mygroup u1		add user u1 to mygroup
+#groups
+#newgrp 		developers	temporarily changes active group
+
+Add a New Group
+sudo groupadd developers
+Add a User to a Group
+sudo usermod -aG developers alice
+Remove a User from a Group
+sudo gpasswd -d alice developers
+View All Groups for a User
+groups alice
+Rename a Group
+sudo groupmod -n devs developers
+
+
+groupadd	Create a new group		sudo groupadd developers
+groupdel	Delete a group			sudo groupdel developers
+groupmod	rename a group 			sudo groupmod -n devs developers
+groups		Show groups a user belongs to	groups alice
+id		Show UID, GID, and groups of a user	id alice
+gpasswd		Administer /etc/group (add/remove users from group)	sudo gpasswd -a alice developers
+usermod		Modify a user’s group memberships	sudo usermod -aG developers alice
+newgrp		Log in to a new group temporarily (changes current group ID)	newgrp developers
+getent group	View all groups (from /etc/group or network source)	getent group
+cat /etc/group	View local group file directly				cat /etc/group
+
+-----------------file permission to groups
+#useradd u1
+#passwd u1
+#useradd u2
+#passwd u2
+$mkdir /home/u1/shared
+$echo "this is user u1 work" > /home/u1/shared/abc.txt
+#usermod -aG sharedgroup u1
+#usermod -aG sharedgroup u2
+
+#chgrp mygroup /home/u1/shared
+#chmod 770 /home/u1/shared
+#chgrp mygroup /home/u1/shared/abc.txt
+#chmod 660 /home/u1/shared/abc.txt
+
+
+#groupadd mygroup    #getent group mygroup     #groupdel mygroup
+#usermod -aG sharedgroup u1
+#usermod -aG sharedgroup u2
+$mkdir /home/u1/shared
+$echo "this is my work" > /home/u1/shared/abc.txt
+
+
+
+https://www.youtube.com/watch?v=Et2cvQvIyUY
+https://www.youtube.com/watch?v=vo9F_l_wwZs&list=PL0tP8lerTbX3eUtBFS0Ir4_aFqKuXWjYZ&index=71
+
+----------------File permission ACL 
+$getfacl abc.txt	(to check permission)
+$setfacl -m u:u2:rwx abc.txt  (adding permission for user)
+$setfacl -m g:mygroup:rwx abc.txt (add permission to group) -m means modification
+$setfact -x u:u2 abc.txt   (to remove user permission)
+$setfact -b abc.txt (to remove all entries like group)
+$setfact -Rm u:u2:rw myfolder/    (adding permission for u2 in all files inside folder)
+$ls -ltr
+-----------------file permission to all other users
+#useradd u1
+#suer passwd u1
+#su - u1
+$touch abc.txt
+$ls -l /home/u1
+$ls -l /home/abc.txt
+$exit			exit back to root
+#useradd u2
+#passwd u2
+#su - u2
+$chmod 755 /home/u1
+$mkdir /home/u1/shared
+$cp /home/u1/abc.txt /home/u1/shared 
+$chmod 777 /home/u1/shared/abc.txt
+----Now u2 can modify the file  
+
+-----------------file permission to groups
+#useradd u1
+#passwd u1
+#useradd u2
+#passwd u2
+$mkdir /home/u1/shared
+$echo "this is user u1 work" > /home/u1/shared/abc.txt
+#groupadd mygroup
+#usermod -aG sharedgroup u1
+#usermod -aG sharedgroup u2
+
+#chgrp mygroup /home/u1/shared
+#chmod 770 /home/u1/shared
+#chgrp mygroup /home/u1/shared/abc.txt
+#chmod 660 /home/u1/shared/abc.txt
+
+
+#groupadd mygroup    #getent group mygroup     #groupdel mygroup
+#usermod -aG sharedgroup u1
+#usermod -aG sharedgroup u2
+$mkdir /home/u1/shared
+$echo "this is my work" > /home/u1/shared/abc.txt
+
+
+------------make sudo user
+wheel group that grants suo privileges.
+#sudo usermod -aG wheel u1 (make sudo user)		
+$sudo whoami (check)
+$groups u1 (check)
+$sudo gpasswd -d u1 wheel (remove sudo)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#adduser noman
+#usencpardel noman               Delete the User
+#userdel -r noman               Delete the User
+#rm -rf /home/abc  forcefully and recursively remove everything under /home/abc.
+#getent passwd noman   verify user has deleted
+#usermod -aG wheel noman       Add noman to the wheel group - This grants sudo access to the user.
+$chmod 777 user1file.txt	add full permission
+$chmod u-r user1file.txt	exclue user read permission
+$chmod u+r user1file.txt	exclue user read permission
+
+chown: to change user ownership
+chgrp: to change group ownership
+
+----------------DELETING	Note: some time user's having file in /var/mail directory
+#Ps –u noman                    to see all processes by the user:
+sudo kill -9 4472                Kill Specific Process (e.g. 4472)
+sudo pkill -u noman        Kill All User Processes
+sudo userdel noman       Delete the User
+sudo userdel -r noman   With deleting home directory
+sudo rm -rf /home/abc  forcefully and recursively remove everything under /home/abc.
+getent passwd noman   verify user has deleted
+ 
+sudo userdel abc              Deletes the user account, but leaves the home directory
+sudo userdel -r abc          Deletes the user and their home directory.
+sudo pkill -u abc                Kills all running processes of user abc, but doesn’t remove files.
+Note: If just ran userdel without -r, their files remain in /home.
+
+
+y
+File Permissions:
+7 type of file permission:
+#ls -l
+read,write,execute
+
+Ansable: 
+Ansable Tower:
+id bob   bob is user, group is bob
+#useradd ansadmin2
+#passwd asnadmin2
+#ll
+#userdel bob     only account deleted  (passwd, shadow, group)
+#userdel -r bob   del account + directory + mail 
+
+/etc/passwd, /etc/shadow, /.etc/group, dir is created, mail spool
+
+cronjob  as root, cronjob as user
+#dh -h /data    output.txt
+#rm -rf nadee, redhat    delete file 
+
+
+
+cat /etc/passwd | grep sarah
+
+rwx  = 7
+rwx --- --- = 7 0 0 
+ls read
+#umask command tempreary    --0022
+Change permission:
+A/bsolute mode: 
+Symbolic mode:
+#chmod 
+#chown  change ownership:group
+#chown ownership:group
+#chown ownership
+#shown group
+#chown 
+user bob, now he is the member of NIT group
+bob has ownership of file#
+
+
+#chown bob:nit test.sh
+#stat /root
+
+read
+write
+execute
+suid
+guid
+sticky bit
+ACL
+
+
+$stat test.sh
+A NIT group only that member have permission to rwx
+add group
+
+
+---------07/09/2025
+1	e
+2	w
+4	r
+full access means 777 dir  owner
+
+#groupadd testers     bob and sarah are in testers group
+#cd /home
+#useradd sarah -u  specific id
+#cat /etc/passwd   to check id here find next id
+#usermod sarah -aG Testersu    add sarah to add in testers group
+#usermod bob -aG Testers
+#getent group Testers
+#userad user1
+#passwd
+#cd home
+#su - user1
+$touch testfile
+$mkdir testdir
+here user1 has full access
+$chown zawar testfile    not permitted
+$sudo shown zawar testfile	this incident will be reported
+$su - user1
+$chmood 777 testfile
+$ls -l testfile      full access
+
+-------------------------------------------------------------------------------------------
+SSH is not working from windows:
+*	ping 10.0.2.15
+*	ss -tlnp | grep :22		(check if ssh is listening) if 127.0.0.1:22, only listening on localhost 
+							(not accessible from outside)
+*	vi /etc/ssh/sshd_config	replace 'ListenAddress 127.0.0.1 to ListenAddress 0.0.0.0)
+*	save and restart SSH
+*	sudo systemctl restart ssh
+*Check VM network Mode
+	If using NAT mode: VM has privae IP (10.0.2.15) cannot ssh
+	Add port forwarding
+	1. power of the VM
+	2. VM setting--Network--adapter 1--NAT
+	3. Advanced -- Port Forwarding
+	4. Add new line:
+		Name: SSH
+		Protocol: TCP
+		Host IP: 2222
+		Guest IP:  10.0.2.15
+		GUest Port: 22
+Now from window:	ssh -p 2222 root@127.0.0.1
+ssh is the command to start an SSH connection.
+-p 2222 tells it to use port 2222 instead of the default (22).
+root@127.0.0.1 is the user (root) and the host (127.0.0.1 = localhost).		
+-------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+ec2-user@172.31.40.22
+
+
+SHELL: 	provide an environment to user to execute commands and interact with kernel.
+	Application -- shell-- kernal --hardward
+
+Hypervisor: 	A hypervisor, also known as a virtual machine monitor (VMM), is software 
+		or firmware that allows multiple virtual machines (VMs) to run on a single 
+		physical machine.
+
+		In simple terms:
+
+		A hypervisor acts like a middleman between the hardware (CPU, memory, storage, 
+		etc.) and multiple operating systems running on virtual machines. Each VM 
+		behaves like a separate computer, even though they all share the same physical 
+		hardware. 
+
+
+
+
+
+
+
+
+
+
+
+1. Check if sshd (the SSH server) is installed
+Run: #rpm -q openssh-server
+If installed, it will return something like:
+openssh-server-8.7p1-36.el9.x86_64
+If not installed, it will say:
+package openssh-server is not installed
+
+#systemctl status sshd	(Check if SSH is running)
+#ss -tuln | grep :22	 or #netstat -tuln | grep :22	(Check if SSH port is open (usually port 22))
+
+#sudo dnf install -y openssh-server	(if not installed)
+sudo systemctl enable sshd –now	(must enable the serices>
+
+

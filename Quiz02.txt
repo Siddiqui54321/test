@@ -1,0 +1,70 @@
+#!/bin/bash
+#
+# Linux Quiz 03
+
+questions=(
+  "What command helps you change directory?"
+  "What is the command and flag for copying in Linux?"
+  "How do you install httpd package in Linux?"
+  "Before the 'httpd' package is installed, does the service already exist on the system?"
+  "What does the 'd' stand for in 'httpd'?"
+  "Give the full command to check the status of a daemon/service if it is running or not."
+  "How do you start a httpd service?"
+  "Home Directory of root is '/' yes or no?"
+  "What is the Home Directory of User 'natasha' (give the full absolute path)?"
+  "If you want to see all the hidden files under a directory what command will you use?"
+  "You have a VM provisioned on your VirtualBox. What is the name AWS gives to its VMs (HINT: answer is in CAPS not lower case)?"
+  "The default user in AWS when you create an EC2 Instance is?"
+  "Can you copy files from Windows to Linux using 'WinSCP'?"
+  "The Home Directory of root is?"
+  "You have a file called 'law-firm.zip' under /home/ec2-user. You want to copy this file from under /home/ec2-user to under Home Directory of root"
+  "Give the full path of the directories where Webpages are hosted."
+  "What command is used to make a file?"
+  "What command is used for making a directory?"
+  "How do you delete all files in a folder?"
+  "Are you learning something new in this class?"
+)
+
+answers=(
+  "cd"
+  "cp -r"
+  "dnf install httpd -y"
+  "No"
+  "daemon/service"
+  "systemctl status httpd"
+  "systemctl start httpd"
+  "no"
+  "/home/natasha"
+  "ls -al"
+  "EC2"
+  "ec2-user"
+  "yes"
+  "/root"
+  "cp -r /home/ec2-user/law-firm.zip /root"
+  "/var/www/html"
+  "touch"
+  "mkdir"
+  "rm -rf *"
+  "yes"
+)
+
+echo "Linux Basics Quiz 03"
+echo "(Exact match required — case and spaces matter)"
+echo
+
+for i in "${!questions[@]}"; do
+  while true; do
+    echo "Q$((i+1)): ${questions[$i]}"
+    read -rp "Your answer: " user_input
+    if [[ "$user_input" == "${answers[$i]}" ]]; then
+      echo "✅ Correct answer!"
+      echo
+      break
+    else
+      echo "❌ Wrong answer. Try again."
+      echo
+    fi
+  done
+done
+
+echo "🎉 Congratulations! You have completed Quiz 03."

@@ -1,0 +1,22 @@
+Website Project
+===============
+1. Create a new instance with .PKK keys
+2. Save the keys in a new folder
+3. Download putty https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html
+4. Let us SSH into ec2 instance using Putty
+5. Let us download a Website Template https://freewebsitetemplates.com/
+6. Let us download WinSCP https://winscp.net/eng/download.php
+7. Let us login into ec2 instance from PuTTy
+8. Let us take a look at our '/var' directory
+9. let us Install "dnf install httpd -y"
+10. Let us "systemctl enable --now httpd.service
+11. Let us select a download template and move it from WINDOWS -> LINUX
+12. Let us copy to the correct folder
+13. Let us unzip
+14. let us long list ls -l
+15. let us change directory and examine the contents of the directory
+16. let us copy all the contents under /var/www/html/
+17. let us remove any unwanted files
+18. Copy the PUBLIC IP from AWS Console
+19. Paste the IP in your Web Browser
+20. EUREKA! You are ready to make MONEY

@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Linux Commands Quiz – Part 1 (Enhanced)</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #111111;
+      --muted: #666666;
+      --card: #ffffff;
+      --border: #dddddd;
+      --green-bg: #e6ffed;
+      --green-bd: #34c759;
+      --red-bg: #ffecec;
+      --red-bd: #ff3b30;
+      --btn: #111111;
+      --btn-fg: #ffffff;
+      --btn2: #e5e5e5;
+    }
+    [data-theme="dark"] {
+      --bg: #0f1419;
+      --fg: #e6edf3;
+      --muted: #9aa7b1;
+      --card: #151b23;
+      --border: #26303a;
+      --green-bg: #0d2a17;
+      --green-bd: #2ea043;
+      --red-bg: #2a1515;
+      --red-bd: #f85149;
+      --btn: #30363d;
+      --btn-fg: #e6edf3;
+      --btn2: #21262d;
+    }
+    html, body { background: var(--bg); color: var(--fg); }
+    body { font-family: Arial, sans-serif; max-width: 980px; margin: 2rem auto; padding: 0 1rem; }
+    h1 { margin-bottom: 0.25rem; }
+    .meta { color: var(--muted); margin-bottom: 1rem; }
+    .toolbar { display: flex; gap: .5rem; align-items: center; margin: .5rem 0 1rem 0; flex-wrap: wrap; }
+    .badge { padding: .25rem .5rem; border: 1px solid var(--border); border-radius: 999px; font-size: .9rem; }
+    .q { padding: 1rem; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 1rem; background: var(--card); }
+    .q h3 { margin: 0 0 .5rem 0; }
+    .options label { display: block; padding: .35rem .5rem; border-radius: 6px; }
+    .correct { background: var(--green-bg); border: 1px solid var(--green-bd); }
+    .wrong { background: var(--red-bg); border: 1px solid var(--red-bd); }
+    .explanation { display: none; margin-top: .4rem; font-size: .95rem; color: var(--fg); }
+    .explanation.show { display: block; }
+    .result { font-weight: bold; font-size: 1.1rem; margin-top: .75rem; }
+    .btns { display: flex; gap: .5rem; margin: 1rem 0; flex-wrap: wrap; }
+    button { padding: .6rem 1rem; border: 1px solid var(--border); background: var(--btn); color: var(--btn-fg); border-radius: 8px; cursor: pointer; }
+    .secondary { background: var(--btn2); color: var(--fg); }
+    .small { font-size: .9rem; color: var(--muted); }
+    code { background: rgba(148,163,184,.15); padding: .1rem .25rem; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Linux Commands Quiz – Part 1 (Enhanced)</h1>
+  <div class="meta">Each question has one correct answer. Submit to grade; correct answers turn green, wrong turn red. Explanations appear below each question.</div>
+
+  <div class="toolbar">
+    <span class="badge" id="timerBadge">⏳ <span id="timeLeft">--:--</span></span>
+    <button type="button" class="secondary" id="themeBtn">Toggle Theme</button>
+    <button type="button" class="secondary" id="retakeBtn">Retake (reshuffle)</button>
+  </div>
+
+  <form id="quizForm"></form>
+
+  <div class="btns">
+    <button type="button" id="submitBtn">Submit</button>
+    <button type="button" class="secondary" id="resetBtn">Reset</button>
+  </div>
+  <div class="result" id="resultBox"></div>
+
+<script>
+const CONFIG = {timerMinutes: 25, shuffleQuestions: true, shuffleOptions: true};
+const RAW_QUESTIONS = [{"q": "Which command shows your current working directory?", "options": ["pwd", "whoami", "ls", "path"], "answer": 0, "exp": "Use `pwd` to print the full path of the current directory."}, {"q": "Which command prints the current logged-in user?", "options": ["who", "whoami", "users", "id -g"], "answer": 1, "exp": "`whoami` outputs your effective username."}, {"q": "Which command shows system date/time?", "options": ["clock", "date", "time", "uptime"], "answer": 1, "exp": "`date` prints and sets the system date/time."}, {"q": "Which command lists files in the current directory?", "options": ["ls", "dir", "list", "show"], "answer": 0, "exp": "`ls` lists directory contents; add flags like `-l`, `-a`."}, {"q": "How do you clear the terminal screen?", "options": ["clear", "reset", "cls", "wipe"], "answer": 0, "exp": "`clear` clears the terminal display buffer."}, {"q": "Show contents of a text file quickly:", "options": ["see", "cat file", "open file", "read file"], "answer": 1, "exp": "`cat <file>` dumps file contents to stdout."}, {"q": "Page through a file with search support:", "options": ["less file", "cat -p file", "view file", "tail -p"], "answer": 0, "exp": "`less` allows paging and searching (press `/` to search)."}, {"q": "View a file page by page (older pager):", "options": ["more file", "cat | more", "view file", "less -o"], "answer": 0, "exp": "`more` pages forward; `less` is generally more powerful."}, {"q": "Create an empty file or update mtime:", "options": ["mkfile", "touch file", "new file", "create"], "answer": 1, "exp": "`touch` creates files or updates timestamps."}, {"q": "Delete a file:", "options": ["del file", "rm file", "erase file", "remove file -f"], "answer": 1, "exp": "`rm <file>` removes files; add `-f` to force."}, {"q": "Edit a file (choose a CLI editor):", "options": ["vi file", "nano file", "Both A and B", "ed file"], "answer": 2, "exp": "Common editors include `vi/vim` and `nano`."}, {"q": "Create a directory:", "options": ["makedir dir", "mkdir dir", "mkd dir", "newdir dir"], "answer": 1, "exp": "`mkdir <dir>` creates directories (use `-p` for parents)."}, {"q": "Delete an empty directory:", "options": ["rm -r dir", "rmdir dir", "rm dir", "unlink dir"], "answer": 1, "exp": "`rmdir` removes empty directories; for non-empty use `rm -rf`."}, {"q": "Change directory one level up:", "options": ["cd ..", "cd -", "cd ~", "back"], "answer": 0, "exp": "`cd ..` goes to the parent directory."}, {"q": "Copy a file to another directory:", "options": ["cp file /path/", "copy file /path/", "mv file /path/", "scp file /path/"], "answer": 0, "exp": "`cp <file> <dest>` copies files locally."}, {"q": "Copy contents of fileA to fileB:", "options": ["cp fileA fileB", "cat fileA > fileB", "Both A and B", "mv fileA fileB"], "answer": 2, "exp": "Both `cp` and shell redirection can create fileB with fileA's content."}, {"q": "Move (cut-paste) a file:", "options": ["mv file /path/", "cp -m file /path/", "rm file /path/", "shift file"], "answer": 0, "exp": "`mv` moves or renames files."}, {"q": "Rename a file:", "options": ["rename file new", "mv file newname", "name file new", "cp file newname"], "answer": 1, "exp": "`mv old new` renames."}, {"q": "Show first 5 lines of a file:", "options": ["head -n 5 file", "head -5 file", "Both A and B", "sed -n '1,5p' file"], "answer": 2, "exp": "`head -5 file` or `head -n 5 file` prints top lines."}, {"q": "Show last 5 lines of a file:", "options": ["tail -n5 file", "tail -5 file", "Both A and B", "sed -n '5,$p' file"], "answer": 2, "exp": "`tail -5 file` or `tail -n 5 file` prints bottom lines."}];
+
+function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+
+function prepareQuestions(){
+  let qs = RAW_QUESTIONS.map(q => JSON.parse(JSON.stringify(q)));
+  if(CONFIG.shuffleQuestions){ shuffle(qs); }
+  if(CONFIG.shuffleOptions){
+    qs.forEach(q => {
+      const pairs = q.options.map((opt, i) => ({opt, i}));
+      shuffle(pairs);
+      q.options = pairs.map(p => p.opt);
+      q.answer = pairs.findIndex(p => p.i === q.answer);
+    });
+  }
+  return qs;
+}
+
+function render(qs){
+  const form = document.getElementById('quizForm');
+  form.innerHTML = '';
+  qs.forEach((q, idx) => {
+    const qid = 'q' + (idx+1);
+    const qDiv = document.createElement('div');
+    qDiv.className = 'q';
+    qDiv.id = qid;
+    const h = document.createElement('h3');
+    h.textContent = (idx+1) + '. ' + q.q;
+    qDiv.appendChild(h);
+
+    const optsDiv = document.createElement('div');
+    optsDiv.className = 'options';
+    q.options.forEach((opt, oi) => {
+      const label = document.createElement('label');
+      const input = document.createElement('input');
+      input.type = 'radio';
+      input.name = qid;
+      input.value = oi;
+      label.appendChild(input);
+      label.appendChild(document.createTextNode(' ' + opt));
+      optsDiv.appendChild(label);
+    });
+    qDiv.appendChild(optsDiv);
+
+    const exp = document.createElement('div');
+    exp.className = 'explanation';
+    exp.id = qid + '_exp';
+    exp.innerHTML = '<b>Explanation:</b> ' + q.exp;
+    qDiv.appendChild(exp);
+
+    const small = document.createElement('div');
+    small.className = 'small';
+    small.textContent = 'Reference: Based on common Linux commands.';
+    qDiv.appendChild(small);
+
+    form.appendChild(qDiv);
+  });
+}
+
+let CURRENT_QS = prepareQuestions();
+
+function clearStyling(qDiv){
+  qDiv.querySelectorAll('.options label').forEach(l => l.classList.remove('correct','wrong'));
+  const exp = qDiv.querySelector('.explanation'); if(exp) exp.classList.remove('show');
+}
+
+function grade(){
+  let correct = 0, total = CURRENT_QS.length;
+  CURRENT_QS.forEach((q, idx) => {
+    const qid = 'q' + (idx+1);
+    const qDiv = document.getElementById(qid);
+    clearStyling(qDiv);
+    const chosen = qDiv.querySelector('input[type=radio]:checked');
+    const labels = Array.from(qDiv.querySelectorAll('.options label'));
+    const exp = document.getElementById(qid + '_exp');
+    if(!chosen){ exp.classList.add('show'); return; }
+    const choice = parseInt(chosen.value, 10);
+    if(choice === q.answer){ labels[choice].classList.add('correct'); correct++; }
+    else { labels[choice].classList.add('wrong'); labels[q.answer].classList.add('correct'); }
+    exp.classList.add('show');
+  });
+  const pct = Math.round((correct/total)*100);
+  document.getElementById('resultBox').textContent = `Score: ${correct}/${total} (${pct}%)`;
+}
+
+function resetQuiz(){
+  document.getElementById('quizForm').reset();
+  document.getElementById('resultBox').textContent = '';
+  document.querySelectorAll('.q').forEach(clearStyling);
+  document.querySelectorAll('.explanation').forEach(e => e.classList.remove('show'));
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function retake(){
+  CURRENT_QS = prepareQuestions();
+  render(CURRENT_QS);
+  resetQuiz();
+  restartTimer();
+}
+
+function toggleTheme(){
+  const html = document.documentElement;
+  html.setAttribute('data-theme', html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+}
+
+let timerHandle = null, secondsLeft = CONFIG.timerMinutes * 60;
+function formatTime(s){ const m = Math.floor(s/60), ss = (s%60).toString().padStart(2,'0'); return m + ':' + ss; }
+function tick(){
+  secondsLeft--;
+  document.getElementById('timeLeft').textContent = formatTime(secondsLeft);
+  if(secondsLeft <= 0){ clearInterval(timerHandle); grade(); alert('Time is up! Your quiz has been submitted.'); }
+}
+function startTimer(){ secondsLeft = CONFIG.timerMinutes * 60; document.getElementById('timeLeft').textContent = formatTime(secondsLeft); timerHandle = setInterval(tick, 1000); }
+function restartTimer(){ if(timerHandle) clearInterval(timerHandle); startTimer(); }
+
+document.addEventListener('DOMContentLoaded', () => {
+  render(CURRENT_QS);
+  document.getElementById('submitBtn').addEventListener('click', grade);
+  document.getElementById('resetBtn').addEventListener('click', resetQuiz);
+  document.getElementById('retakeBtn').addEventListener('click', retake);
+  document.getElementById('themeBtn').addEventListener('click', toggleTheme);
+  startTimer();
+});
+</script>
+
+</body>
+</html>
