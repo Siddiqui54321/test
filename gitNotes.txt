@@ -1,13 +1,26 @@
 1.	Open Command Prompt / PowerShell
 		>git –version
+
 2.	Chose Your Virsion Control Folder, it better to create new folder for testing
 		>mkdir MyGitProject
 		>cd MyGitProject
+
 3.	Initialize Git to start tracking this folder.
-		>git init	--A hidden .git folder is created
+		>git init										--A hidden .git folder is created
+
 4.	Check file status
-		>dir /a
-		>git status			
-		
-		
-	
+		>dir /a											--to view newly created .git file
+		>git status										--You’ll see files in red → means not tracked yet	
+
+5.	Add file to Git (staging) - file will turn to green
+		>git add .										--for all files
+		>git add gitNotes.txt							----You’ll see files in green → means tracked yet.
+		>git commit -m "Initial Project file"			--create the first version	
+
+6.	Connect to your GitHub repository
+		>git remote add origin https://github.com/Siddiqui54321/test.git
+		>git remote -v
+
+7.	Push Code from WIndows to GitHub
+		>git branch -M main
+		>git push -u origin main	
